@@ -1,0 +1,89 @@
+@font-face {
+  font-family: ohBaby;
+  src: url(../fonts/OoohBaby-Regular.ttf);
+}
+
+@font-face {
+  font-family: DMSerif;
+  src: url(../fonts/DMSerifText-Regular.ttf);
+}
+
+@font-face {
+  font-family: OpenSans;
+  src: url(../fonts/OpenSans-Regular.ttf);
+}
+
+body {
+  margin: 0px;
+}
+
+h1 {
+  margin: auto;
+  position: absolute;
+  font-family: ohBaby;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 40px;
+  color: white;
+  top: 50px;
+  left: 5%;
+}
+
+h2 {
+  font-family: DMSerif;
+  text-align: center;
+}
+
+h3 {
+  font-family: DMSerif;
+  font-size: 24px;
+  margin-bottom: 0;
+}
+
+h4 {
+  font-family: ohBaby;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  color: white;
+  margin: 0;
+  margin-top: 10px;
+}
+
+h5 {
+  font-family: OpenSans;
+  font-size: 20px;
+  color: white;
+  margin: 20px 0px 10px 0px;
+}
+
+p {
+  font-family: OpenSans;
+  margin: 5%;
+}
+
+img {
+  width: 100%;
+}
+
+footer {
+  background-color: #00d1ef;
+  height: 291px;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+ul {
+  margin: 0;
+  padding-left: 0;
+  list-style-type: none;
+}
+
+li {
+  margin-top: 3px;
+}
+
+a {
+  color: white;
+  font-family: OpenSans;
+}

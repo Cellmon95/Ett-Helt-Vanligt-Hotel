@@ -1,0 +1,56 @@
+#hero {
+  position: relative;
+}
+
+#hero img {
+  width: 100%;
+  height: 502px;
+  object-fit: cover;
+  object-position: 0 0;
+}
+
+#hero img::after {
+  object-position: 0px;
+  box-shadow: inset 0px 0px 0px black;
+}
+
+#hero h1,
+#hero h2 {
+  position: absolute;
+}
+
+#hero h2 {
+  bottom: 10%;
+  left: 10%;
+}
+
+/* Description Section */
+
+#description img {
+  width: 100%;
+}
+
+/* rooms*/
+
+#rooms h2 {
+  margin: 35px;
+}
+
+/* Footer */
+
+footer svg {
+  display: block;
+  margin: auto;
+  margin-top: 50%;
+}
+
+footer h3 {
+  color: white;
+}
+
+footer p {
+  margin: 0;
+  width: 140px;
+  font-size: 14px;
+  color: white;
+}
