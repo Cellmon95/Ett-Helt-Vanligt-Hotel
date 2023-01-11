@@ -13,7 +13,7 @@ $postdata = json_encode([
 $options = [
     'http' => [
         'method' => 'POST',
-        'header' => 'Content-Type: application/json;',
+        'header' => 'Content-Type: application/json;  charset=UTF-8',
         'content' => $postdata
     ]
 ];
