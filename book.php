@@ -6,7 +6,7 @@ declare(strict_types=1);
 $postdata = json_encode([
     "form_params" => [
         "transferCode" => '2e3c06ea-3b95-4ca6-b2ba-4346d9005d9e',
-        "totalCost" => 10
+        "totalCost" => 110
     ]
 ]);
 
@@ -20,6 +20,6 @@ $options = [
 
 $context  = stream_context_create($options);
 
-$result = file_get_contents('https://www.yrgopelago.se/centralbank/transfercode', false, $context);
+$result = file_get_contents('https://jsonplaceholder.typicode.com/posts', false, $context);
 header('Content-Type: application/json');
 echo $result;
