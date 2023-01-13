@@ -2,24 +2,103 @@
 
 
 declare(strict_types=1);
+require __DIR__ . "/vendor/autoload.php";
+include 'hotelFunctions.php';
 
-$postdata = json_encode([
-    "form_params" => [
-        "transferCode" => '2e3c06ea-3b95-4ca6-b2ba-4346d9005d9e',
-        "totalCost" => 110
-    ]
-]);
-
-$options = [
-    'http' => [
-        'method' => 'POST',
-        'header' => 'Content-Type: application/json;  charset=UTF-8',
-        'content' => $postdata
-    ]
+const roomPrices = [
+    'budget' => 3,
+    'standard' => 5,
+    'luxury' => 8
 ];
 
-$context  = stream_context_create($options);
+$client = new \GuzzleHttp\Client();
 
-$result = file_get_contents('https://jsonplaceholder.typicode.com/posts', false, $context);
-header('Content-Type: application/json');
-echo $result;
+$transferCode = $_POST['transferCode'];
+$arrival = $_POST['arrival'];
+$departure = $_POST['departure'];
+//$totalPrice = calcTotalPrice();
+
+
+function calcTotalPrice()
+{
+    $roomPrice = $_POST['room'];
+    $daysStayed = $_POST['departure'] - $_POST['arrival'];
+    $totalPrice = $roomPrice * $daysStayed;
+    return $totalPrice;
+}
+
+function checkIfTransferCodeIsValid(string $transferCode, int $roomPrice, $client)
+{
+    $response =  $client->post('https://www.yrgopelago.se/centralbank/transferCode', [
+        'form_params' => [
+            'transferCode' => $transferCode,
+            'totalcost' => roomPrices[$roomPrice]
+        ]
+    ]);
+
+    $responseBody = json_decode((string)$response->getBody(), true);
+
+    if (isset($responseBody['error'])) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+//TODO:: don't have user name in code
+function beginTransaction($client, $transferCode)
+{
+    $response =  $client->post('https://www.yrgopelago.se/centralbank/transferCode', [
+        'form_params' => [
+            'user' => 'Lucas',
+            'transfercode' => $transferCode
+        ]
+    ]);
+}
+
+function printJson()
+{
+    $confirmJson = [
+        'island' => 'La isla normal',
+        'hotel' => 'Det Vanliga Hotelet',
+        'arrival_date' => $arrival,
+        'departure_date' => $departure,
+        'total_cost' => $totalCost,
+        'stars' => 3,
+        'features' => 'none',
+        'additional_info' => 'Din Mamma'
+    ];
+
+    echo json_encode($confirmJson);
+}
+
+function logToDB($arrival, $departure, $costumer, $room)
+{
+    $db = connect('vanligtHotelDB.sqlite');
+    $query = 'INSERT INTO booking VALUES
+    (1, ' . $arrival . '. , ' . $departure . ', ' . $costumer . ', ' . $room . ')';
+
+    $query = 'INSERT INTO booking VALUES
+    (2, 2023, 2023, "Anders", "budget");';
+
+    $sth = $db->prepare($query);
+    $sth->execute();
+}
+
+function calcDaysBeetwenArrivalAndDepature($arrival, $departure)
+{
+    $test = strtotime($arrival) - strtotime(($departure));
+    return abs(round($test / 86400));
+}
+
+//execute
+/*
+if (checkIfTransferCodeIsValid($transferCode, $roomPrice, $client)) {
+    beginTransaction($client, $transferCode);
+    logToDB();
+} else {
+    echo 'The transferCode is not valid';
+}
+*/
+
+logToDB($arrival, $departure, 'Anders', 'Budget');
