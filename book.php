@@ -76,10 +76,8 @@ function logToDB($arrival, $departure, $costumer, $room)
 {
     $db = connect('vanligtHotelDB.sqlite');
     $query = 'INSERT INTO booking VALUES
-    (1, ' . $arrival . '. , ' . $departure . ', ' . $costumer . ', ' . $room . ')';
+    (3, ' . $arrival . '. , ' . $departure . ', "' . $costumer . '" , "' . $room . '")';
 
-    $query = 'INSERT INTO booking VALUES
-    (2, 2023, 2023, "Anders", "budget");';
 
     $sth = $db->prepare($query);
     $sth->execute();
@@ -100,5 +98,3 @@ if (checkIfTransferCodeIsValid($transferCode, $roomPrice, $client)) {
     echo 'The transferCode is not valid';
 }
 */
-
-logToDB($arrival, $departure, 'Anders', 'Budget');
