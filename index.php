@@ -118,8 +118,10 @@ $calendar = new Calendar('2023-01-01');
             </ul>
         </div>
     </footer>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.22/vue.min.js"></script>
-    <script src="script/script.js"></script> -->
+
+    <script>
+
+    </script>
 </body>
 
 </html>
