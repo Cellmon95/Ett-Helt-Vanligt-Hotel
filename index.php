@@ -5,6 +5,10 @@ include 'hotelFunctions.php';
 include 'main.php';
 $calendar = new Calendar('2023-01-01');
 
+function fillOcupiedDates()
+{
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -120,7 +124,6 @@ $calendar = new Calendar('2023-01-01');
     </footer>
 
     <script>
-
     </script>
 </body>
 

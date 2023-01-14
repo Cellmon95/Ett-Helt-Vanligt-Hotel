@@ -18,6 +18,9 @@ $arrival = $_POST['arrival'];
 $departure = $_POST['departure'];
 //$totalPrice = calcTotalPrice();
 
+function checkIfDateIsFree()
+{
+}
 
 function calcTotalPrice()
 {
@@ -76,7 +79,7 @@ function logToDB($arrival, $departure, $costumer, $room)
 {
     $db = connect('vanligtHotelDB.sqlite');
     $query = 'INSERT INTO booking VALUES
-    (3, ' . $arrival . '. , ' . $departure . ', "' . $costumer . '" , "' . $room . '")';
+    (6,  "' . $arrival . '" , "' . $departure . '", "' . $costumer . '" , "' . $room . '")';
 
 
     $sth = $db->prepare($query);
@@ -88,6 +91,8 @@ function calcDaysBeetwenArrivalAndDepature($arrival, $departure)
     $test = strtotime($arrival) - strtotime(($departure));
     return abs(round($test / 86400));
 }
+
+logToDB($arrival, $departure, 'Ander', 'budget');
 
 //execute
 /*
