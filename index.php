@@ -8,12 +8,20 @@ $calendarStandard = new Calendar('2023-01-01');
 $calendarLuxury = new Calendar('2023-01-01');
 $db = connect('vanligtHotelDB.sqlite');
 
+$occupiedDatesBudget = getOccupiedDatesFromDB($db, 'budget');
+$occupiedDatesStandard = getOccupiedDatesFromDB($db, 'standard');
+$occupiedDatesLuxury = getOccupiedDatesFromDB($db, 'luxury');
 
-//$calendarBudget->add_event('Booked', '2023-01-01', 4, 'red');
+foreach ($occupiedDatesBudget as $occupiedDateBudget) {
+    $calendarBudget->add_event('Booked', $occupiedDateBudget, 1, 'red');
+}
 
-$occupiedDates = getOccupiedDatesFromDB($db);
-foreach ($occupiedDates as $occupiedDate) {
-    $calendarBudget->add_event('Booked', $occupiedDate, 1, 'red');
+foreach ($occupiedDatesStandard as $occupiedDateStandard) {
+    $calendarStandard->add_event('Booked', $occupiedDateStandard, 1, 'red');
+}
+
+foreach ($occupiedDatesLuxury as $occupiedDateLuxury) {
+    $calendarLuxury->add_event('Booked', $occupiedDateLuxury, 1, 'red');
 }
 ?>
 
@@ -94,11 +102,19 @@ foreach ($occupiedDates as $occupiedDate) {
             <input type="text" id="transferCode" name="transferCode"><br><br>
             <label for="arrival">Arrival:</label>
             <input type="date" id="arrival" name="arrival"><br><br>
+
             <label for="departure">Departure:</label>
             <input type="date" id="departure" name="departure"><br><br>
             <label for="room">Room:</label>
-            <input type="text" id="room" name="room"><br><br>
-            <input type="submit" value="Submit">
+            <div id="room">
+                <input type="radio" id="radio" name="room" value="budget" checked>
+                <label for="radio">Budget</label><br>
+                <input type="radio" id="radio" name="room" value="standard">
+                <label for="radio">Standard</label><br>
+                <input type="radio" id="radio" name="room" value="luxury">
+                <label for="radio">Luxury</label><br>
+            </div>
+
         </form>
     </section>
 

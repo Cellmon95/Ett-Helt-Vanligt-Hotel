@@ -52,10 +52,10 @@ function isValidUuid(string $uuid): bool
 }
 
 
-function getOccupiedDatesFromDB($db)
+function getOccupiedDatesFromDB($db, $roomType)
 {
     //connect to db
-    $query = 'SELECT booking.arrival, booking.departure FROM booking';
+    $query = 'SELECT booking.arrival, booking.departure FROM booking WHERE booking.room = "' . $roomType . '"';
     $sth = $db->query($query);
     $bookedDates = $sth->fetchAll(PDO::FETCH_ASSOC);
 
