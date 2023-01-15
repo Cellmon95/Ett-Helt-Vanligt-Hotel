@@ -2,8 +2,12 @@
 
 include 'Calendar.php';
 include 'hotelFunctions.php';
-include 'main.php';
-$calendar = new Calendar('2023-01-01');
+
+$calendarBudget = new Calendar('2023-01-01');
+$calendarStandard = new Calendar('2023-01-01');
+$calendarLuxury = new Calendar('2023-01-01');
+
+//$calendarBudget->add_event('Booked', '2023-01-01', 4, 'red');
 
 function fillOcupiedDates()
 {
@@ -73,7 +77,13 @@ function fillOcupiedDates()
     </section>
 
     <section id="status">
-        <?php echo $calendar; ?>
+        <h3>Budget</h3>
+        <?= $calendarBudget; ?>
+        <h3>Standard</h3>
+        <?= $calendarStandard; ?>
+        <h3>Luxury</h3>
+        <?= $calendarLuxury; ?>
+
     </section>
 
     <section id="booking">
