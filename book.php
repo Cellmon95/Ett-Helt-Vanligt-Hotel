@@ -22,26 +22,11 @@ $db = connect('vanligtHotelDB.sqlite');
 function checkIfDateIsFree(DateTime $arrival, DateTime $departure, $db)
 {
 
-    //connect to db
-    $query = 'SELECT booking.arrival, booking.departure FROM booking';
-    $sth = $db->query($query);
-    $bookedDates = $sth->fetchAll(PDO::FETCH_ASSOC);
-
-
     $dayIntervall = DateInterval::createFromDateString('1 day');
     $datesStaying = new DatePeriod($arrival, $dayIntervall, $departure);
 
-    $datesOccupied = [];
-    foreach ($bookedDates as $bookedDate) {
-        $bookedDateArrival = new DateTime($bookedDate['arrival']);
-        $bookedDateDeparture = new DateTime($bookedDate['departure']);
 
-        $datesBooked = new DatePeriod($bookedDateArrival, $dayIntervall, $bookedDateDeparture);
-
-        foreach ($datesBooked as $bookedDate) {
-            array_push($datesOccupied, $bookedDate->format('l Y-m-d'));
-        }
-    }
+    $datesOccupied = getOccupiedDatesFromDB($db);
 
     foreach ($datesStaying as $dateStaying) {
         $dateStayingAsString = $dateStaying->format('l Y-m-d');

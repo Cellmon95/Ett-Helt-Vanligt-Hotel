@@ -6,13 +6,15 @@ include 'hotelFunctions.php';
 $calendarBudget = new Calendar('2023-01-01');
 $calendarStandard = new Calendar('2023-01-01');
 $calendarLuxury = new Calendar('2023-01-01');
+$db = connect('vanligtHotelDB.sqlite');
+
 
 //$calendarBudget->add_event('Booked', '2023-01-01', 4, 'red');
 
-function fillOcupiedDates()
-{
+$occupiedDates = getOccupiedDatesFromDB($db);
+foreach ($occupiedDates as $occupiedDate) {
+    $calendarBudget->add_event('Booked', $occupiedDate, 1, 'red');
 }
-
 ?>
 
 <!DOCTYPE html>

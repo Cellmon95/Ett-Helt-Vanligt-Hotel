@@ -50,3 +50,28 @@ function isValidUuid(string $uuid): bool
     }
     return true;
 }
+
+
+function getOccupiedDatesFromDB($db)
+{
+    //connect to db
+    $query = 'SELECT booking.arrival, booking.departure FROM booking';
+    $sth = $db->query($query);
+    $bookedDates = $sth->fetchAll(PDO::FETCH_ASSOC);
+
+    $datesOccupied = [];
+    $dayIntervall = DateInterval::createFromDateString('1 day');
+
+    foreach ($bookedDates as $bookedDate) {
+        $bookedDateArrival = new DateTime($bookedDate['arrival']);
+        $bookedDateDeparture = new DateTime($bookedDate['departure']);
+
+        $datesBooked = new DatePeriod($bookedDateArrival, $dayIntervall, $bookedDateDeparture);
+
+        foreach ($datesBooked as $bookedDate) {
+            array_push($datesOccupied, $bookedDate->format('l Y-m-d'));
+        }
+    }
+
+    return $datesOccupied;
+}
