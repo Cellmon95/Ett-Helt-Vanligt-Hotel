@@ -100,20 +100,23 @@ foreach ($occupiedDatesLuxury as $occupiedDateLuxury) {
         <form action="./book.php" method="post">
             <label for="transferCode">Transfear Code:</label>
             <input type="text" id="transferCode" name="transferCode"><br><br>
+            <label for="name">Name:</label>
+            <input type="text" id="costumerName" name="costumerName"><br><br>
             <label for="arrival">Arrival:</label>
-            <input type="date" id="arrival" name="arrival"><br><br>
-
+            <input type="date" min="2023-01-01" max="2023-01-31" id="arrival" name="arrival"><br><br>
             <label for="departure">Departure:</label>
-            <input type="date" id="departure" name="departure"><br><br>
+            <input type="date" min="2023-01-01" max="2023-01-31" id="departure" name="departure"><br><br>
             <label for="room">Room:</label>
             <div id="room">
-                <input type="radio" id="radio" name="room" value="budget" checked>
+                <input type="radio" id="roomType" name="roomType" value="budget" checked>
                 <label for="radio">Budget</label><br>
-                <input type="radio" id="radio" name="room" value="standard">
+                <input type="radio" id="roomType" name="roomType" value="standard">
                 <label for="radio">Standard</label><br>
-                <input type="radio" id="radio" name="room" value="luxury">
+                <input type="radio" id="roomType" name="roomType" value="luxury">
                 <label for="radio">Luxury</label><br>
             </div>
+
+            <input type="submit" value="Boka">
 
         </form>
     </section>
@@ -150,9 +153,6 @@ foreach ($occupiedDatesLuxury as $occupiedDateLuxury) {
             </ul>
         </div>
     </footer>
-
-    <script>
-    </script>
 </body>
 
 </html>

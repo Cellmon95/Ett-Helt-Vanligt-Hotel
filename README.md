@@ -1,16 +1,14 @@
-WHY NOT A GIF HERE? TO SET THE MODE.
+# La Isla Normal
 
-# Island name
+Härlig spansk ö för dem som vill ha det som det alltid ha varit.
 
-Some text about your lovely island
+# Det Vanliga Hotelet
 
-# Hotel name
-
-Why not add some info about the hotel of your dreams?
+Det Vanliga Hotelet för den vanliga människan.
 
 # Instructions
 
-If your project requires some installation or similar, please inform your user 'bout it. For instance, if you want a more decent indentation of your .php files, you could edit [.editorconfig]('/.editorconfig').
+The site GUI supports only mobile view.
 
 # Code review
 

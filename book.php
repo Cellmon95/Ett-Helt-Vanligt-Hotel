@@ -1,9 +1,13 @@
 <?php
 
-
 declare(strict_types=1);
 require __DIR__ . "/vendor/autoload.php";
 include 'hotelFunctions.php';
+header('Content-Type: application/json; charset=utf-8');
+
+//load .env
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 
 const roomPrices = [
     'budget' => 3,
@@ -16,17 +20,19 @@ $client = new \GuzzleHttp\Client();
 $transferCode = $_POST['transferCode'];
 $arrival = $_POST['arrival'];
 $departure = $_POST['departure'];
+$costumerName = $_POST['costumerName'];
 $db = connect('vanligtHotelDB.sqlite');
+$roomType = $_POST['roomType'];
 //$totalPrice = calcTotalPrice();
 
-function checkIfDateIsFree(DateTime $arrival, DateTime $departure, $db)
+function checkIfDateIsFree(DateTime $arrival, DateTime $departure, PDO $db, string $roomType)
 {
 
     $dayIntervall = DateInterval::createFromDateString('1 day');
     $datesStaying = new DatePeriod($arrival, $dayIntervall, $departure);
 
 
-    $datesOccupied = getOccupiedDatesFromDB($db);
+    $datesOccupied = getOccupiedDatesFromDB($db, $roomType);
 
     foreach ($datesStaying as $dateStaying) {
         $dateStayingAsString = $dateStaying->format('l Y-m-d');
@@ -40,29 +46,20 @@ function checkIfDateIsFree(DateTime $arrival, DateTime $departure, $db)
     return true;
 }
 
-function calcTotalPrice()
-{
-    $roomPrice = $_POST['room'];
-    $daysStayed = $_POST['departure'] - $_POST['arrival'];
-    $totalPrice = $roomPrice * $daysStayed;
-    return $totalPrice;
-}
-
 function checkIfTransferCodeIsValid(string $transferCode, int $roomPrice, $client)
 {
     $response =  $client->post('https://www.yrgopelago.se/centralbank/transferCode', [
         'form_params' => [
             'transferCode' => $transferCode,
-            'totalcost' => roomPrices[$roomPrice]
+            'totalcost' => $roomPrice
         ]
     ]);
-
     $responseBody = json_decode((string)$response->getBody(), true);
 
     if (isset($responseBody['error'])) {
-        return true;
-    } else {
         return false;
+    } else {
+        return true;
     }
 }
 
@@ -80,12 +77,12 @@ function beginTransaction($client, $transferCode)
 function printJson($arrival, $departure, $totalCost)
 {
     $confirmJson = [
-        'island' => 'La isla normal',
-        'hotel' => 'Det Vanliga Hotelet',
+        'island' => $_ENV['ISLAND_NAME'],
+        'hotel' => $_ENV['HOTEL_NAME'],
         'arrival_date' => $arrival,
         'departure_date' => $departure,
         'total_cost' => $totalCost,
-        'stars' => 3,
+        'stars' => $_ENV['STARS'],
         'features' => 'none',
         'additional_info' => ''
     ];
@@ -93,11 +90,11 @@ function printJson($arrival, $departure, $totalCost)
     echo json_encode($confirmJson);
 }
 
-function logToDB($arrival, $departure, $costumer, $room)
+function logToDB($arrival, $departure, $costumer, $roomType)
 {
     $db = connect('vanligtHotelDB.sqlite');
-    $query = 'INSERT INTO booking VALUES
-    (6,  "' . $arrival . '" , "' . $departure . '", "' . $costumer . '" , "' . $room . '")';
+    $query = 'INSERT INTO booking(arrival, departure, costumer, room) VALUES
+    ("' . $arrival . '" , "' . $departure . '", "' . $costumer . '" , "' . $roomType . '")';
 
 
     $sth = $db->prepare($query);
@@ -110,16 +107,26 @@ function calcDaysBeetwenArrivalAndDepature($arrival, $departure)
     return abs(round($daysInSeconds / 86400));
 }
 
-//logToDB($arrival, $departure, 'Ander', 'budget');
-
-
-
 //execute
-/*
-if (checkIfTransferCodeIsValid($transferCode, $roomPrice, $client)) {
-    beginTransaction($client, $transferCode);
-    logToDB();
+
+if (checkIfDateIsFree(new Datetime($arrival), new DateTime($departure), $db, $roomType)) {
+
+    //calculate total cost
+    $roomPrice = roomPrices[$roomType];
+    $daysStayed = calcDaysBeetwenArrivalAndDepature($arrival, $departure);
+    $totalCost = $roomPrice * $daysStayed;
+
+    if (checkIfTransferCodeIsValid($transferCode, (int)$totalCost, $client)) {
+        beginTransaction($client, $transferCode);
+        logToDB($arrival, $departure, $costumerName, $roomType);
+        printJson($arrival, $departure, $totalCost);
+    } else {
+        echo '{
+            "error": "TransferCode är inte giltig eller redan använd!!!"
+        }';
+    }
 } else {
-    echo 'The transferCode is not valid';
+    echo '{
+            "error": "Rummet är inte ledigt!!!"
+        }';
 }
-*/
