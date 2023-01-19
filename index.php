@@ -1,5 +1,6 @@
 <?php
-
+session_start();
+$_SESSION["loginVerified"] = false;
 include 'Calendar.php';
 include 'hotelFunctions.php';
 
@@ -42,7 +43,7 @@ foreach ($occupiedDatesLuxury as $occupiedDateLuxury) {
 </head>
 
 <body>
-    <header></header>
+    <?php require("header.php") ?>
     <section id="hero">
         <img src="images/hero.jpg" />
         <h1>Ett Helt Vanligt Hotel</h1>

@@ -54,3 +54,21 @@ footer p {
   font-size: 14px;
   color: white;
 }
+
+header {
+  z-index: 10;
+  position: absolute;
+  height: 100px;
+  width: 100vw;
+}
+
+.stars {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+}
+.star {
+  padding-right: 10px;
+  font-size: 64px;
+  color: orange;
+}

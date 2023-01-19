@@ -8,12 +8,18 @@ header('Content-Type: application/json; charset=utf-8');
 //load .env
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
+$db = new PDO("sqlite:vanligtHotelDB.sqlite");
 
-const roomPrices = [
-    'budget' => 3,
-    'standard' => 5,
-    'luxury' => 8
+$stmt = $db->prepare("SELECT room, price from prices");
+$stmt->execute();
+$prices = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$roomPrices = [
+    $prices[0]["room"] => $prices[0]["price"],
+    $prices[1]["room"] => $prices[1]["price"],
+    $prices[2]["room"] => $prices[2]["price"]
 ];
+
+
 
 $client = new \GuzzleHttp\Client();
 
@@ -90,11 +96,11 @@ function printJson($arrival, $departure, $totalCost)
     echo json_encode($confirmJson);
 }
 
-function logToDB($arrival, $departure, $costumer, $roomType)
+function logToDB($arrival, $departure, $costumer, $roomType, $totalCost)
 {
     $db = connect('vanligtHotelDB.sqlite');
-    $query = 'INSERT INTO booking(arrival, departure, costumer, room) VALUES
-    ("' . $arrival . '" , "' . $departure . '", "' . $costumer . '" , "' . $roomType . '")';
+    $query = 'INSERT INTO booking(arrival, departure, costumer, room, total_cost) VALUES
+    ("' . $arrival . '" , "' . $departure . '", "' . $costumer . '" , "' . $roomType . '" , "' .  $totalCost . '")';
 
 
     $sth = $db->prepare($query);
@@ -112,13 +118,13 @@ function calcDaysBeetwenArrivalAndDepature($arrival, $departure)
 if (checkIfDateIsFree(new Datetime($arrival), new DateTime($departure), $db, $roomType)) {
 
     //calculate total cost
-    $roomPrice = roomPrices[$roomType];
+    $roomPrice = $roomPrices[$roomType];
     $daysStayed = calcDaysBeetwenArrivalAndDepature($arrival, $departure);
     $totalCost = $roomPrice * $daysStayed;
 
     if (checkIfTransferCodeIsValid($transferCode, (int)$totalCost, $client)) {
         beginTransaction($client, $transferCode);
-        logToDB($arrival, $departure, $costumerName, $roomType);
+        logToDB($arrival, $departure, $costumerName, $roomType, $totalCost);
         printJson($arrival, $departure, $totalCost);
     } else {
         echo '{
