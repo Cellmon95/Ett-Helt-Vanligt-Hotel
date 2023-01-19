@@ -1,0 +1,42 @@
+.logbookCards {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  width: 100%;
+  gap: 20px;
+  padding-top: 20px;
+}
+.card {
+  background-color: #00d1ef;
+  border-radius: 10px;
+  text-align: center;
+  width: 32%;
+  min-height: 400px;
+}
+
+.factBoxes {
+  display: flex;
+  gap: 20px;
+}
+
+.costumerBooking {
+  border-top: 3px solid black;
+}
+
+.closed {
+  height: 300px;
+  overflow-y: hidden;
+  position: relative;
+}
+
+.openBox {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 10px;
+  width: 60%;
+  height: 5%;
+  background-color: gray;
+  cursor: pointer;
+}
